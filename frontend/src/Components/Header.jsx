@@ -1,16 +1,15 @@
 import React from 'react'
 
-import { AppBar  , Toolbar , styled ,InputBase} from "@mui/material";
 import logo from  "../assets/gmaillogo.png"
 
 
 
-const Header = () => {
+const Header = ({toogelButton}) => {
 
   return (
         <div className='bg-[#f5f5f5] static flex w-full justify-between py-[1.5vw] px-[1vw]'>
           <div className='flex justify-center items-center'>
-           <i className="ri-menu-line text-black/50 text-[2.1vw] cursor-pointer"></i>
+           <i onClick={toogelButton}  className="ri-menu-line text-black/50 text-[2.1vw] cursor-pointer"></i>
            <img src={logo} className="h-[2.6vw] w-[2.6vw] mx-[1vw]" alt="" />
            <h1 className="text-black/50  font-normal text-[2.1vw]">Gmail</h1>
           </div>
