@@ -1,7 +1,6 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import axiosInstance from '../utils/axiosInstance';
 
-// Async thunk to send an email
 export const sendEmail = createAsyncThunk('composeMail/sendEmail', async (emailData, { rejectWithValue }) => {
   try {
     const response = await axiosInstance.post('/send', emailData);

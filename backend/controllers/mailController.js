@@ -54,4 +54,49 @@ const getMails = async (req, res) => {
     res.status(500).json({ message: 'Failed to fetch mails', error: error.message });
   }
 };
-module.exports = { sendMail , getMails };
+
+const moveToBin = async (req, res) => {
+  const { id } = req.params;
+  try {
+    const email = await Mail.findByIdAndUpdate(id, { bin: true }, { new: true });
+    if (!email) {
+      return res.status(404).json({ message: 'Email not found' });
+    }
+    res.status(200).json({ message: 'Email moved to bin', email });
+  } catch (error) {
+    console.error('Error moving email to bin:', error.message);
+    res.status(500).json({ message: 'Failed to move email to bin', error: error.message });
+  }
+};
+
+const archiveEmail = async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    const email = await Mail.findByIdAndUpdate(id, { archive: true }, { new: true });
+    if (!email) {
+      return res.status(404).json({ message: 'Email not found' });
+    }
+    res.status(200).json({ message: 'Email archived successfully', email });
+  } catch (error) {
+    console.error('Error archiving email:', error.message);
+    res.status(500).json({ message: 'Failed to archive email', error: error.message });
+  }
+};
+
+const deleteEmail = async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    const email = await Mail.findByIdAndDelete(id);
+    if (!email) {
+      return res.status(404).json({ message: 'Email not found' });
+    }
+    res.status(200).json({ message: 'Email deleted successfully', email });
+  } catch (error) {
+    console.error('Error deleting email:', error.message);
+    res.status(500).json({ message: 'Failed to delete email', error: error.message });
+  }
+};
+
+module.exports = { sendMail , getMails ,moveToBin , archiveEmail ,deleteEmail};

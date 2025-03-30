@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const axiosInstance = axios.create({
-  baseURL: 'http://localhost:3000/api/mail', // Base URL for the backend API
+  baseURL: 'http://localhost:3000/api/mail',
   headers: {
     'Content-Type': 'application/json',
   },
