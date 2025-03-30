@@ -3,10 +3,12 @@ const bodyParser = require('body-parser');
 const cors = require('cors');
 const dotenv = require('dotenv');
 const mailRoutes = require('./routes/mailRoutes'); 
+const dbConnection = require('./Database/dbconnection');
+
 
 dotenv.config();
-
 const app = express();
+dbConnection();
 
 // Middleware
 app.use(cors());

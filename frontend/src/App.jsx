@@ -5,10 +5,13 @@ import ComposeMail from './Components/ComposeMail'
 import InboxMail from './Components/InboxMail'
 import AllMail from './Components/AllMail'
 import DisplayMail from './Components/DisplayMail'
+import { Toaster} from 'sonner';
+
 
 const App = () => {
   return (
    <div>
+     <Toaster position="top-center" richColors/>
       <Routes>
         <Route path="/" element={<Main />}>
           <Route path="mailbox" element={<DisplayMail />}>
@@ -16,8 +19,8 @@ const App = () => {
             <Route path="inbox" element={<InboxMail />} />
             <Route path="allmail" element={<AllMail />} />
           </Route>
+          <Route path="/compose" element={< ComposeMail />} />
         </Route>
-        <Route path="/compose" element={<ComposeMail />} />
       </Routes>
     </div>
   )
