@@ -1,13 +1,19 @@
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchDrafts } from '../Redux/emailSlice';
+import { useNavigate } from 'react-router';
 
 const DraftMail = () => {
   const dispatch = useDispatch();
-  const { drafts } = useSelector((state) => state.emails);
+  const navigate  = useNavigate()
+  const { emails } = useSelector((state) => state.emails);
+  const drafts = emails.filter((email) => email.draft); // Filter only draft emails
+  const handleDraftClick = (draft) => {
+    navigate('/compose', { state: { draft } }); // Navigate to ComposeMail with draft data
+  };
 
   useEffect(() => {
-    dispatch(fetchDrafts()); // Fetch drafts when the component loads
+    dispatch(fetchDrafts());
   }, [dispatch]);
 
   return (
@@ -22,7 +28,8 @@ const DraftMail = () => {
             <div className="left h-full w-[20%] flex justify-start items-center gap-3">
               <div>{draft.recipients || 'No Recipient'}</div>
             </div>
-            <div className="mid h-full w-[60%]">
+            <div onClick={() => handleDraftClick(draft)} 
+             className="mid h-full w-[60%] cursor-pointer">
               <div className="flex justify-start items-center gap-3 h-full w-full">
                 <div className="subject text-[1.2vw] text-black">{draft.subject}</div>
                 <div className="message text-[1.2vw] text-black/80 line-clamp-1">

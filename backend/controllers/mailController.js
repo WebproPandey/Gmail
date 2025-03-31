@@ -36,6 +36,7 @@ const sendMail = async (req, res) => {
       recipients,
       subject,
       message,
+      draft: false,
       status: 'sent',
     });
     await mail.save();
@@ -120,6 +121,22 @@ const saveDraft = async (req, res) => {
     res.status(500).json({ message: 'Failed to save draft', error: error.message });
   }
 };
+
+const deleteDraft = async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    const draft = await Mail.findByIdAndDelete(id);
+    if (!draft) {
+      return res.status(404).json({ message: 'Draft not found' });
+    }
+    res.status(200).json({ message: 'Draft deleted successfully', draft });
+  } catch (error) {
+    console.error('Error deleting draft:', error.message);
+    res.status(500).json({ message: 'Failed to delete draft', error: error.message });
+  }
+};
+
 const getDrafts = async (req, res) => {
   try {
     const drafts = await Mail.find({ draft: true });
@@ -149,4 +166,4 @@ const toggleStarredEmail = async (req, res) => {
   }
 };
 
-module.exports = { saveDraft ,getDrafts  , toggleStarredEmail , sendMail , getMails ,moveToBin , archiveEmail ,deleteEmail};
+module.exports = { saveDraft , deleteDraft , getDrafts  , toggleStarredEmail , sendMail , getMails ,moveToBin , archiveEmail ,deleteEmail};

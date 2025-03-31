@@ -1,15 +1,17 @@
 import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { useNavigate } from 'react-router';
+import { useLocation, useNavigate } from 'react-router';
 import { toast } from 'sonner';
 import { sendEmail  } from '../Redux/composeMailSlice';
-import { saveDraft } from '../Redux/emailSlice';
+import { saveDraft ,deleteDraft} from '../Redux/emailSlice';
 
 
 const ComposeMail = ({ mailtoogelButton }) => {
-  const [recipients, setRecipients] = useState('');
-  const [subject, setSubject] = useState('');
-  const [message, setMessage] = useState('');
+  const location = useLocation();
+  const draft = location.state?.draft || {};
+  const [recipients, setRecipients] = useState(draft.recipients || '');
+  const [subject, setSubject] = useState(draft.subject || '');
+  const [message, setMessage] = useState(draft.message || '');
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -25,6 +27,9 @@ const ComposeMail = ({ mailtoogelButton }) => {
 
     if (sendEmail.fulfilled.match(resultAction)) {
       toast.success('Email sent successfully!');
+      if (draft._id) {
+        await dispatch(deleteDraft(draft._id));
+      }
       mailtoogelButton();
       navigate('/mailbox/inbox'); 
     } else {

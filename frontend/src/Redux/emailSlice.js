@@ -51,6 +51,14 @@ export const fetchDrafts = createAsyncThunk('emails/fetchDrafts', async () => {
     throw error;
   }
 });
+export const deleteDraft = createAsyncThunk('emails/deleteDraft', async (id, { rejectWithValue }) => {
+  try {
+    const response = await axiosInstance.delete(`/draft/${id}`);
+    return response.data.draft;
+  } catch (error) {
+    return rejectWithValue(error.response?.data?.message || error.message);
+  }
+});
 
 export const toggleStarredEmail = createAsyncThunk('emails/toggleStarredEmail', async (id, { rejectWithValue }) => {
   try {

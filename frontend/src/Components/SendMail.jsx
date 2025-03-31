@@ -33,7 +33,8 @@ const SendMail = () => {
   const dispatch = useDispatch();
   const { emails, status, error } = useSelector((state) => state.emails);
   const navigate =  useNavigate()
-  const [isread , SetIsread] =   useState(false); 
+  const [isread , SetIsread] =   useState({}); 
+  const sentEmails = emails.filter((email) => !email.draft);
 
   useEffect(() => {
     dispatch(fetchEmails());
@@ -48,7 +49,10 @@ const SendMail = () => {
   };
 
   const handleRead = (id) => {
-    SetIsread(!isread);
+    SetIsread((prev) => ({
+      ...prev,
+      [id]: !prev[id], 
+    }));
   }
   const handleMail = (email) => {
     navigate('/mailbox/mail', { state: { email } }); 
@@ -69,9 +73,9 @@ const SendMail = () => {
     <div className="h-full w-full bg-black/20 ">
       <div className="w-full h-[10vh] text-center bg-black/20 py-[1vh]">Send Messages</div>
       <div className="mailinbox w-full min-h-full overflow-y-auto    ">
-        {emails.map((email) => (
+        {sentEmails.map((email) => (
           <div  key={email._id} 
-          className={`mail w-full h-[8vh] ${isread ? 'bg-[#F2F6FC]' : 'bg-black/30' }  border-[0.4px] border-black/30 flex justify-center  items-center px-[1vw] relative group transition-all duration-300  z-[1] hover:shadow-lg hover:z-[2] hover:border-[1.5px] `}>
+          className={`mail w-full h-[8vh] ${isread[email._id]  ? 'bg-[#F2F6FC]' : 'bg-black/30' }  border-[0.4px] border-black/30 flex justify-center  items-center px-[1vw] relative group transition-all duration-300  z-[1] hover:shadow-lg hover:z-[2] hover:border-[1.5px] `}>
 
              <div className="w-[20%] flex justify-evenly  items-center bg-white h-full absolute right-0 top-0 opacity-0 group-hover:opacity-[1] transition-all  duration-300  ease-out">
 
@@ -83,9 +87,12 @@ const SendMail = () => {
                <i className='ri-inbox-archive-line  text-[1.2vw] text-black/50'></i>
               </div>
 
-              <div  onClick={handleRead} className='mail h-[6vh] w-[6vh] rounded-full   flex justify-center items-center hover:bg-black/20'>
-                {isread ? <i className='ri-mail-open-line text-[1.2vw] text-black/50'></i> : <i className='ri-mail-line text-[1.2vw] text-black/50'></i>}
-              </div>
+              <div  onClick={() =>handleRead(email._id)} className='mail h-[6vh] w-[6vh] rounded-full   flex justify-center items-center hover:bg-black/20'>
+              {isread[email._id] ? (
+                  <i className="ri-mail-open-line text-[1.2vw] text-black/50"></i>
+                ) : (
+                  <i className="ri-mail-line text-[1.2vw] text-black/50"></i>
+                )}              </div>
               <div className='time h-[6vh] w-[6vh] rounded-full   flex justify-center items-center hover:bg-black/20'>
                <i className='ri-time-line text-[1.2vw] text-black/50'></i>
               </div>

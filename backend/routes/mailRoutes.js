@@ -1,5 +1,5 @@
 const express = require('express');
-const { sendMail ,getMails ,moveToBin ,archiveEmail, deleteEmail , getDrafts, saveDraft , toggleStarredEmail } = require('../controllers/mailController');
+const { sendMail ,getMails ,moveToBin ,archiveEmail, deleteEmail , getDrafts, saveDraft,deleteDraft  , toggleStarredEmail } = require('../controllers/mailController');
 
 const router = express.Router();
 
@@ -11,6 +11,7 @@ router.patch('/archive/:id', archiveEmail);
 router.delete('/delete/:id', deleteEmail);
 router.post('/draft', saveDraft);
 router.get('/drafts', getDrafts);
+router.delete('/draft/:id', deleteDraft);
 router.patch('/star/toggle/:id', toggleStarredEmail);
 
 
