@@ -21,7 +21,7 @@ const Sidebar = ({mailtoogelButton}) => {
     {
       name: "Draft",
       icon: "ri-file-3-line",
-      to: "/mailbox/draft",
+      to: "/mailbox/drafts",
     },
     {
       name: "Bin",

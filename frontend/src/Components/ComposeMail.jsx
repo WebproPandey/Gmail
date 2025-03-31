@@ -2,7 +2,9 @@ import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router';
 import { toast } from 'sonner';
-import { sendEmail } from '../Redux/composeMailSlice';
+import { sendEmail  } from '../Redux/composeMailSlice';
+import { saveDraft } from '../Redux/emailSlice';
+
 
 const ComposeMail = ({ mailtoogelButton }) => {
   const [recipients, setRecipients] = useState('');
@@ -14,6 +16,10 @@ const ComposeMail = ({ mailtoogelButton }) => {
   const { status, error } = useSelector((state) => state.composeMail);
 
   const handleSendMail = async () => {
+    if (!recipients || !message) {
+      toast.error('Recipients and message are required to send an email.');
+      return;
+    }
     const emailData = { recipients, subject, message };
     const resultAction = await dispatch(sendEmail(emailData));
 
@@ -26,9 +32,23 @@ const ComposeMail = ({ mailtoogelButton }) => {
     }
   };
 
+
   const closemailbox = () => {
     mailtoogelButton();
-    navigate('/');
+    navigate('/mailbox/inbox');
+  };
+
+  const SaveASDraft = async () => {
+    const emailData = { recipients, subject, message };
+    const resultAction = await dispatch(saveDraft(emailData));
+
+    if (saveDraft.fulfilled.match(resultAction)) {
+      toast.success('Draft saved successfully!');
+      mailtoogelButton();
+      navigate('/mailbox/drafts'); 
+    } else {
+      toast.error(resultAction.payload || 'Failed to save draft.');
+    }
   };
 
   return (
@@ -36,7 +56,7 @@ const ComposeMail = ({ mailtoogelButton }) => {
       <div className="mailwraper w-[70%] h-[90%] bg-white relative rounded-lg px-[1vw]">
         <div className="flex justify-between items-center">
           <div className="text-[1.1vw] font-medium text-black/50">New Message</div>
-          <div onClick={closemailbox} className="close cursor-pointer">
+          <div onClick={SaveASDraft} className="close cursor-pointer">
             <i className="ri-close-fill text-[2vw] text-black/50"></i>
           </div>
         </div>

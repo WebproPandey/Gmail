@@ -1,5 +1,5 @@
 const express = require('express');
-const { sendMail ,getMails ,moveToBin ,archiveEmail, deleteEmail } = require('../controllers/mailController');
+const { sendMail ,getMails ,moveToBin ,archiveEmail, deleteEmail , getDrafts, saveDraft , toggleStarredEmail } = require('../controllers/mailController');
 
 const router = express.Router();
 
@@ -9,6 +9,10 @@ router.get('/inbox', getMails);
 router.patch('/bin/:id', moveToBin);
 router.patch('/archive/:id', archiveEmail);
 router.delete('/delete/:id', deleteEmail);
+router.post('/draft', saveDraft);
+router.get('/drafts', getDrafts);
+router.patch('/star/toggle/:id', toggleStarredEmail);
+
 
 
 
